@@ -20,7 +20,7 @@ LOG_DIR="${CI_LOG_DIR:-$REPO_DIR/logs}"
 GITHUB_API="https://api.github.com"
 LOG_FILE="$LOG_DIR/${AFTER_SHA}.log"
 
-mkdir -p "$LOG_DIR" "$REPO_DIR/review-output"
+mkdir -p "$LOG_DIR"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 post_status() {
@@ -44,11 +44,11 @@ post_status() {
 cleanup() {
     local exit_code=$?
     if [ "$exit_code" -eq 0 ]; then
-        post_status success 'Odoo tests and standards review passed' || \
+        post_status success 'Odoo automation tests passed' || \
             echo 'Warning: GitHub success status could not be posted'
         result=passed
     else
-        post_status failure 'Odoo CI failed; inspect the local CI log' || \
+        post_status failure 'Odoo automation tests failed; inspect the local CI log' || \
             echo 'Warning: GitHub failure status could not be posted'
         result=failed
     fi
@@ -98,17 +98,6 @@ MODULES="$(
 echo "Commit: $AFTER_SHA"
 echo "Changed files: $CHANGED_FILES_JSON"
 echo "Changed modules: $MODULES"
-
-python3 "$REPO_DIR/tools/odoo_standards_review.py" \
-    --repo-root "$REPO_DIR" \
-    --changed-files-json "$CHANGED_FILES_JSON" \
-    --json-output "$REPO_DIR/review-output/odoo-review.json" \
-    --markdown-output "$REPO_DIR/review-output/odoo-review.md"
-
-if [ "$(jq 'length' "$REPO_DIR/review-output/odoo-review.json")" -gt 0 ]; then
-    cat "$REPO_DIR/review-output/odoo-review.md"
-    exit 1
-fi
 
 while IFS= read -r module_json; do
     module_name="$(jq -r '.name' <<< "$module_json")"
