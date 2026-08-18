@@ -18,9 +18,10 @@ DB_PREFIX="${POSTGRES_DB:-odoo_test}"
 DOCKER_NETWORK="${CI_DOCKER_NETWORK:-test-ci-cd-ci}"
 LOG_DIR="${CI_LOG_DIR:-$REPO_DIR/logs}"
 GITHUB_API="https://api.github.com"
+LOG_FILE="$LOG_DIR/${AFTER_SHA}.log"
 
 mkdir -p "$LOG_DIR" "$REPO_DIR/review-output"
-exec > >(tee -a "$LOG_DIR/${AFTER_SHA}.log") 2>&1
+exec > >(tee -a "$LOG_FILE") 2>&1
 
 post_status() {
     local state="$1"
@@ -43,10 +44,23 @@ post_status() {
 cleanup() {
     local exit_code=$?
     if [ "$exit_code" -eq 0 ]; then
-        post_status success 'Odoo tests and standards review passed'
+        post_status success 'Odoo tests and standards review passed' || \
+            echo 'Warning: GitHub success status could not be posted'
+        result=passed
     else
-        post_status failure 'Odoo CI failed; inspect the local CI log'
+        post_status failure 'Odoo CI failed; inspect the local CI log' || \
+            echo 'Warning: GitHub failure status could not be posted'
+        result=failed
     fi
+    python3 "$REPO_DIR/ci/send_ci_email.py" \
+        --repository "$REPO_SLUG" \
+        --branch "$BRANCH" \
+        --commit "$AFTER_SHA" \
+        --actor "$ACTOR" \
+        --author "$AUTHOR_EMAIL" \
+        --result "$result" \
+        --log-file "$LOG_FILE" || \
+        echo 'Warning: CI email could not be sent'
     rmdir "$LOG_DIR/ci.lock" 2>/dev/null || true
     exit "$exit_code"
 }
