@@ -19,6 +19,6 @@ class TestShCiDemoTask(TransactionCase):
         self.assertEqual(task.state, 'done')
 
     def test_intentional_failure_for_ci_demo(self):
-        """Temporary failure used to verify CI failure reporting."""
+        """Temporary failure used to verify CI and email failure reporting."""
         task = self.env['sh.ci.demo.task'].create({'name': 'CI task'})
         self.assertEqual(task.state, 'done')
