@@ -1,0 +1,6 @@
+.env.local
+logs/
+review-output/
+__pycache__/
+*.py[cod]
+.DS_Store

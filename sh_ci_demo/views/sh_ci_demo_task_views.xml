@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sh_ci_demo_task_view_list" model="ir.ui.view">
+        <field name="name">sh.ci.demo.task.list</field>
+        <field name="model">sh.ci.demo.task</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="sh_ci_demo_task_view_form" model="ir.ui.view">
+        <field name="name">sh.ci.demo.task.form</field>
+        <field name="model">sh.ci.demo.task</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_mark_done" type="object" string="Mark Done"
+                            invisible="state == 'done'" class="btn-primary"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <field name="name"/>
+                    <field name="description"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sh_ci_demo_task_action" model="ir.actions.act_window">
+        <field name="name">CI Demo Tasks</field>
+        <field name="res_model">sh.ci.demo.task</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="sh_ci_demo_menu_root" name="CI Demo" sequence="10"/>
+    <menuitem id="sh_ci_demo_menu_tasks" name="Tasks" parent="sh_ci_demo_menu_root"
+              action="sh_ci_demo_task_action" sequence="10"/>
+</odoo>

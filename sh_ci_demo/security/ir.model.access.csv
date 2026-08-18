@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_create,perm_read,perm_write,perm_unlink
+sh_ci_demo_task_user,CI Demo Task User,model_sh_ci_demo_task,base.group_user,1,1,1,1
