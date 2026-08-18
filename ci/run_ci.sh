@@ -77,8 +77,9 @@ MODULES="$(
             fi
             dir="$(dirname "$dir")"
         done
-    done <<< "$CHANGED_FILES"
-    ) | jq -s -c 'unique_by(.name, .addons_path)')"
+    done <<< "$CHANGED_FILES" |
+        jq -s -c 'unique_by(.name, .addons_path)'
+    )"
 
 echo "Commit: $AFTER_SHA"
 echo "Changed files: $CHANGED_FILES_JSON"

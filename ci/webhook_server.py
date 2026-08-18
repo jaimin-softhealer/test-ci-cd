@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# Copyright (C) Softhealer Technologies Pvt. Ltd.
 #!/usr/bin/env python3
 """Secure GitHub push webhook receiver for local CI."""
 

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# Copyright (C) Softhealer Technologies Pvt. Ltd.
 #!/usr/bin/env python3
 """Suggestion-only checks for changed Odoo Python and XML files."""
 
