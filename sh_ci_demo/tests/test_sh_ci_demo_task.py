@@ -5,7 +5,7 @@ from odoo.tests.common import TransactionCase
 
 
 class TestShCiDemoTask(TransactionCase):
-    """Verify the demo task lifecycle."""
+    """Verify the CI demo task lifecycle."""
 
     def test_create_task_starts_in_draft(self):
         """A new task must start in draft state."""
