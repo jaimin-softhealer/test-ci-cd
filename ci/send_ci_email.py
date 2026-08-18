@@ -27,9 +27,10 @@ def main():
     """Send the CI result when SMTP configuration and recipients are present."""
     args = parse_args()
     smtp_host = os.environ.get('SMTP_HOST', '')
+    recipient_source = os.environ.get('CI_EMAIL_TO') or args.author
     recipients = [
         address.strip()
-        for address in os.environ.get('CI_EMAIL_TO', args.author).split(',')
+        for address in recipient_source.split(',')
         if address.strip()
     ]
     if not smtp_host or not recipients:

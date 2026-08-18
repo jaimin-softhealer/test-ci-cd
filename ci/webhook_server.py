@@ -54,7 +54,9 @@ class Handler(BaseHTTPRequestHandler):
             ref = payload['ref']
             after = payload['after']
             before = payload.get('before', '0' * 40)
-            author = (payload.get('head_commit') or {}).get('author', {}).get('email', '')
+            author = (payload.get('pusher') or {}).get('email', '')
+            if not author:
+                author = (payload.get('head_commit') or {}).get('author', {}).get('email', '')
             actor = (payload.get('sender') or {}).get('login', '')
         except (KeyError, json.JSONDecodeError):
             self._reply(400, 'invalid payload')

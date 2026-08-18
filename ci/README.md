@@ -10,8 +10,8 @@ it temporarily for GitHub delivery testing.
 
 When SMTP variables are configured, every completed run sends a plain-text
 notification containing the commit result and CI log. `CI_EMAIL_TO` supports a
-comma-separated list; when it is empty, the notification uses the commit
-author email from the GitHub push payload. Email failures are logged as
+comma-separated list; when it is unset or empty, the notification uses the
+pusher email from the GitHub push payload. Email failures are logged as
 warnings and do not change the CI result.
 
 For Gmail, use an App Password rather than the account password. Keep all SMTP
