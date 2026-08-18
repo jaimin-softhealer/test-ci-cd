@@ -17,3 +17,8 @@ class TestShCiDemoTask(TransactionCase):
         task = self.env['sh.ci.demo.task'].create({'name': 'CI task'})
         task.action_mark_done()
         self.assertEqual(task.state, 'done')
+
+    def test_intentional_failure_for_ci_demo(self):
+        """Temporary failure used to verify CI failure reporting."""
+        task = self.env['sh.ci.demo.task'].create({'name': 'CI task'})
+        self.assertEqual(task.state, 'done')
